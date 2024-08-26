@@ -2,16 +2,15 @@ import { shallowEqual, useSelector } from 'react-redux'
 import ShowItems from '../ShowItems/ShowItems'
 
 const HomeComponent = () => {
-  const files = [
-    { data: { name: 'New file' } },
-    { data: { name: 'New file 2' } }
-  ]
 
-  const { isLoading, userFolders } = useSelector(
+  const { isLoading, userFolders, userFiles } = useSelector(
     (state) => ({
       isLoading: state.filefolders.isLoading,
       userFolders: state.filefolders.userFolders.filter(
         (folder) => folder.data.parent === 'root'
+      ),
+      userFiles: state.filefolders.userFiles.filter(
+        (file) => file.data.parent === 'root'
       )
     }),
     shallowEqual
@@ -28,7 +27,11 @@ const HomeComponent = () => {
             type={'folder'}
             items={userFolders} 
           />
-          <ShowItems title={'Documentos creados'} type={'file'} items={files} />
+          <ShowItems 
+            title={'Documentos creados'}
+            type={'file'} 
+            items={userFiles.filter((file) => file.data.url === null)} 
+          />
         </>
       )}
     </div>

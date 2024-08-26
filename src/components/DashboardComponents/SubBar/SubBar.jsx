@@ -10,7 +10,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { shallowEqual, useDispatch, useSelector } from 'react-redux'
 import { changeFolder } from '../../../redux/actionCreators/fileFoldersActionCreator'
 
-const SubBar = ({ setIsCreateFolderModalOpen }) => {
+const SubBar = ({ setIsCreateFolderModalOpen, setIsCreateFileModalOpen }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -30,7 +30,7 @@ const SubBar = ({ setIsCreateFolderModalOpen }) => {
   return (
     <nav className="navbar navbar-expand-lg mt-2 navbar-light bg-white py-2">
       <nav className='ms-5' aria-label="breadcrumb">
-        <ol class='breadcrumb d-flex align-items-center'>
+        <ol className='breadcrumb d-flex align-items-center'>
           {currentFolder !== 'root' ? (
             <>
               <button
@@ -45,8 +45,7 @@ const SubBar = ({ setIsCreateFolderModalOpen }) => {
                   className='breadcrumb-item btn btn-link text-decoration-none'
                   onClick={() =>
                     handleNavigate(
-                      `/dashboard/folder/${
-                        userFolders.find((fldr) => folder === fldr.docId).docId
+                      `/dashboard/folder/${userFolders.find((fldr) => folder === fldr.docId).docId
                       }`,
                       userFolders.find((fldr) => folder === fldr.docId).docId
                     )
@@ -74,7 +73,9 @@ const SubBar = ({ setIsCreateFolderModalOpen }) => {
           </button>
         </li>
         <li className='nav-item mx-2'>
-          <button className='btn btn-outline-dark'>
+          <button className='btn btn-outline-dark'
+            onClick={() => setIsCreateFileModalOpen(true)}
+          >
             <FontAwesomeIcon icon={faFileAlt} /> &nbsp; Crear documento
           </button>
         </li>
