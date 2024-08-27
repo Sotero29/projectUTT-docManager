@@ -1,5 +1,8 @@
 # React + Vite
-Create and Fetch Subfolders
+
+#12 Open Files and Created Files Editor UI Creation | React Js Firebase File Management System
+
+me falta el final de codeeditor.jsx
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

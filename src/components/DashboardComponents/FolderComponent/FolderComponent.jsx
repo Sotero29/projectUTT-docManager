@@ -20,29 +20,36 @@ const FolderComponent = () => {
     shallowEqual
   )
 
+  const createdFiles =
+    childFiles && childFiles.filter((file) => file.data.url === null)
+  const uploadedFiles =
+    childFiles && childFiles.filter((file) => file)
+
   return (
     <div>
-      {childFolders.length > 0 ? (
+      {childFolders.length > 0 || childFiles.length > 0 ? (
         <>
-          {
-            childFolders.length > 0 && (
-              <ShowItems
-                title={'Carpetas creadas'}
-                type={'folder'}
-                items={childFolders}
-              />
-            )
-          }
-          {
-            childFiles.length > 0 && (
-              <ShowItems
-                title={'Archivos creadas'}
-                type={'file'}
-                items={childFiles.filter((file) => file.data.url === null)}
-              />
-            )
-          }
-
+          {childFolders.length > 0 && (
+            <ShowItems
+              title={'Carpetas creadas'}
+              type={'folder'}
+              items={childFolders}
+            />
+          )}
+          {createdFiles && createdFiles.length > 0 && (
+            <ShowItems
+              title={'Archivos creadas'}
+              type={'file'}
+              items={createdFiles}
+            />
+          )}
+          {uploadedFiles &&  uploadedFiles.length > 0 && (
+            <ShowItems
+              title={'Archivos actualizados'}
+              type={'file'}
+              items={uploadedFiles}
+            />
+          )}
         </>
       ) : (
         <p className='text-center my-5'>Carpeta vacía</p>

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-
 import { signInUser } from '../../redux/actionCreators/authActionCreator'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const LoginForm = () => {
   const [email, setEmail] = useState('')
@@ -15,7 +15,7 @@ const LoginForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!email || !password) {
-      alert('Rellena todos los campos')
+      toast.error('Rellena todos los campos')
       return
     }
 

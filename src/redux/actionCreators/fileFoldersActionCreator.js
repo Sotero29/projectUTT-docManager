@@ -1,5 +1,6 @@
 import * as types from '../actionsTypes/fileFoldersActionTypes'
 import fire from '../../config/firebase'
+import { toast } from 'react-toastify'
 //actions
 
 const addFolder = (payload) => ({
@@ -34,6 +35,10 @@ const addFile = (payload) => ({
   payload,
 })
 
+const setFileData = (payload) => ({
+  type: types.SET_FILE_DATA,
+  payload,
+})
 // action creators
 
 export const createFolder = (data) => (dispatch) => {
@@ -45,7 +50,7 @@ export const createFolder = (data) => (dispatch) => {
       const folderData = await (await folder.get()).data()
       const folderId = folder.id
       dispatch(addFolder({ data: folderData, docId: folderId }))
-      alert('Se creo la carpeta correctamente')
+      toast.success('Se creo la carpeta correctamente')
     })
 }
 
@@ -95,11 +100,62 @@ export const createFile = (data, setSuccess) => (dispatch) => {
     .then(async (file) => {
       const fileData = await (await file.get()).data()
       const fileId = file.id
-      alert('Archivo creado correctamente ')
+      toast.success('Documento creado correctamente ')
       dispatch(addFile({ data: fileData, docId: fileId }))
       setSuccess(true)
     })
     .catch(() => {
       setSuccess(false)
     })
+}
+
+export const updateFileData = (fileId, data) => (dispatch) => {
+  fire
+    .firestore()
+    .collection('files')
+    .doc(fileId)
+    .update({ data })
+    .then(() => {
+      dispatch(setFileData({ fileId, data }))
+      toast.success('Documento guardado')
+    })
+    .catch(() => {
+      toast.error('Algo salio mal')
+    })
+}
+
+export const uploadFile = (file, data, setSuccess) => (dispatch) => {
+  const uploadFileRef = fire.storage().ref(`files/${data.userId}/${data.name}`)
+
+  uploadFileRef.put(file).on(
+    'estado cambiado',
+    (snapshot) => {
+      const progress = Math.round(
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+      )
+      console.log('actualizado' + progress + '%')
+    },
+    (error) => {
+      console.log(error)
+    },
+    async () => {
+      const fileUrl = await uploadFileRef.getDownloadURL()
+      const fullData = { ...data, url: fileUrl }
+
+      fire
+        .firestore()
+        .collection('files')
+        .add(fullData)
+        .then(async (file) => {
+          const fileData = await (await file.get()).data()
+          const fileId = file.id
+          dispatch(addFile({ data: fileData, docId: fileId }))
+          toast.success('file actualizacion correctamente')
+          setSuccess(true)
+        })
+        .catch(() => {
+          setSuccess(false)
+        })
+    }
+  )
 }

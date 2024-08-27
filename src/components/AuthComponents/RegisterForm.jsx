@@ -2,6 +2,7 @@ import React, { useEffect, useState }from 'react'
 import { useDispatch } from 'react-redux'
 import { signUpUser } from '../../redux/actionCreators/authActionCreator'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 const RegisterForm = () => {
   const [name, setName] = useState('')
@@ -16,11 +17,11 @@ const RegisterForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!name || !email || !password || !passwordConfirmation) {
-      alert('Rellene todos los campos')
+      toast.error('Rellene todos los campos')
       return
     }
     if (password != passwordConfirmation) {
-      alert('Las contraseñas no son iguales')
+      toast.error('Las contraseñas no son iguales')
       return
     }
 

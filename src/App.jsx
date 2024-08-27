@@ -1,5 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import './App.css'
 import { Login, Register, HomePage, DashboardPage } from './pages'
@@ -15,6 +17,7 @@ const App = () => {
 
   return (
     <div className='App'>
+      <ToastContainer/>
       <Routes>
         <Route path='/' element={<HomePage/> } />
         <Route path='/login' element={<Login/>} />
